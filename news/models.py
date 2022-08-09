@@ -9,3 +9,6 @@ class News(models.Model):
     date_create = models.DateField(auto_now_add=True)
     date_update = models.DateField(auto_now=True)
     is_published = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
