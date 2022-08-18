@@ -12,10 +12,13 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
 
 def index(request):
     posts = News.objects.all()
+    cats = Categories.objects.all()
     parameters = {
         'posts': posts,
         'title': 'Главная страница',
-        'menu': menu
+        'menu': menu,
+        'cats': cats,
+        'cat_selected': 0,
     }
     return render(request, 'news/index.html', context=parameters)
 
@@ -33,6 +36,21 @@ def login(request):
 
 def show_post(request, post_id):
     return HttpResponse(f"<h1>Отображение статьи с id = {post_id}</h1>")
+
+def show_category(request, cat_id):
+    posts = News.objects.filter(cat_id=cat_id)
+    if len(posts) == 0:
+        return HttpResponseNotFound('<h1>Страница не найдена!</h1>')
+    cats = Categories.objects.all()
+    parameters = {
+        'posts': posts,
+        'title': 'Отображение по рубрикам',
+        'menu': menu,
+        'cats': cats,
+        'cat_selected': cat_id,
+    }
+
+    return render(request, 'news/index.html', context=parameters)
 
 # def error_404(request, excpeption):
 #     return HttpResponseNotFound('<h1>Страница не найдена!</h1>')

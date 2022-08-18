@@ -33,13 +33,18 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
-		<li class="selected">Все категории</li>
-        <li><a href="#">Главная</a></li>
-		<li><a href="#">Футбол</a></li>
-		<li><a href="#">Хоккей</a></li>
-		<li><a href="#">Волейбол</a></li>
-        <li><a href="#">Бокс</a></li>
-        <li><a href="#">Большой теннис</a></li>
+        {% if cat_selected == 0 %}
+		    <li class="selected">Главная</li>
+        {% else %}
+            <li><a href="{% url 'home' %}">Главная</a></li>
+        {% endif %}
+		{% for c in cats %}
+            {% if c.pk == cat_selected %}
+                <li class="selected">{{ c.name }}</li>
+            {% else %}
+                <li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
+            {% endif %}
+        {% endfor %}
         <hr>
 	</ul>
 </td>
