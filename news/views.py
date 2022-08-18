@@ -11,7 +11,7 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
 ]
 
 def index(request):
-    posts = News.objects.all()
+    posts = News.objects.filter(is_published=True)
     cats = Categories.objects.all()
     parameters = {
         'posts': posts,
@@ -38,7 +38,7 @@ def show_post(request, post_id):
     return HttpResponse(f"<h1>Отображение статьи с id = {post_id}</h1>")
 
 def show_category(request, cat_id):
-    posts = News.objects.filter(cat_id=cat_id)
+    posts = News.objects.filter(cat_id=cat_id, is_published=True)
     if len(posts) == 0:
         return HttpResponseNotFound('<h1>Страница не найдена!</h1>')
     cats = Categories.objects.all()
