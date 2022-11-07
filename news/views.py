@@ -1,7 +1,8 @@
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
+# superuser: login admin, pass 123
 
 from .models import *
 
@@ -39,12 +40,21 @@ def login(request):
     return HttpResponse('<h1>Страница входа</h1>')
 
 
-def show_post(request, post_id):
-    return HttpResponse(f"<h1>Отображение статьи с id = {post_id}</h1>")
+def show_post(request, post_slug):
+    post = get_object_or_404(News, slug=post_slug)
+
+    context = {
+        'post': post,
+        'menu': menu,
+        'title': post.title,
+        'cat_selected': post.cat_id,
+    }
+
+    return render(request, 'news/post.html', context=context)
 
 
-def show_category(request, cat_id):
-    posts = News.objects.filter(cat_id=cat_id, is_published=True)
+def show_category(request, cat_slug):
+    posts = News.objects.filter(cat__slug=cat_slug, is_published=True)
     if len(posts) == 0:
         return HttpResponseNotFound('<h1>Страница не найдена!</h1>')
     # cats = Categories.objects.all()
@@ -52,7 +62,7 @@ def show_category(request, cat_id):
         'posts': posts,
         'title': 'Отображение по рубрикам',
         'menu': menu,
-        'cat_selected': cat_id,
+        'cat_selected': cat_slug,
     }
 
     return render(request, 'news/index.html', context=parameters)
