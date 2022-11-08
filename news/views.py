@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
+from .forms import *
 # Create your views here.
 # superuser: login admin, pass 123
 
@@ -8,6 +9,7 @@ from .models import *
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Обратная связь", 'url_name': 'contact'},
+        {'title': "Добавить статью", 'url_name': 'add_page'},
         {'title': "Войти", 'url_name': 'login'},
 ]
 
@@ -34,6 +36,20 @@ def categories(request, catid):
 
 def contact(request):
     return HttpResponse('<h1>Страница контактов</h1>')
+
+
+def addpage(request):
+    if request.method == "POST":
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            try:
+                News.objects.create(**form.cleaned_data)
+                return redirect('home')
+            except:
+                form.add_error(None, 'Ошибка добавления поста')
+    else:
+        form = AddPostForm()
+    return render(request, 'news/addpage.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
 
 
 def login(request):
