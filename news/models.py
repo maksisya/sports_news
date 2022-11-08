@@ -4,14 +4,14 @@ from django.urls import reverse
 # Create your models here.
 
 class News(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, verbose_name='Заголовок')
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
-    content = models.TextField(blank=True)
+    content = models.TextField(blank=True, verbose_name='Текст статьи')
     image = models.ImageField(upload_to="images/", null=True)
     date_create = models.DateField(auto_now_add=True)
     date_update = models.DateField(auto_now=True)
-    is_published = models.BooleanField(default=True)
-    cat = models.ForeignKey('Categories', on_delete=models.PROTECT)
+    is_published = models.BooleanField(default=True, verbose_name='Публикация')
+    cat = models.ForeignKey('Categories', on_delete=models.PROTECT, verbose_name='Категория')
 
     def __str__(self):
         return self.title
