@@ -22,7 +22,7 @@ class News(models.Model):
     class Meta:
         verbose_name = "Новости спорта"
         verbose_name_plural = "Новости спорта"
-        ordering = ['id']
+        ordering = ['title']
 
 class Categories(models.Model):
     name = models.CharField(max_length=100, db_index=True)
@@ -37,4 +37,4 @@ class Categories(models.Model):
     class Meta:
         verbose_name = "Категории"
         verbose_name_plural = "Категории"
-        ordering = ['id']
+        ordering = ['name']
